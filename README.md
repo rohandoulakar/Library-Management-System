@@ -22,9 +22,6 @@ This project demonstrates a modular backend system to manage library operations 
 ---
 
 ## Setup Instructions
-1. Clone the repository:
-
-git clone <your-repo-url>
-
+- Clone the repository: git clone <your-repo-url>
 - Navigate to the top-level directory containing the pom.xml
 - Build the project: mvn clean install
