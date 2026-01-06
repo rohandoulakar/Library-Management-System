@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Borrowed Books</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <h1>My Borrowed Books</h1>
+    <button id="backBtn" class="btn">Back to Library</button>
+</header>
+
+<div id="msg-area"></div>
+
+<section class="panel">
+    <table id="myBooksTable">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Action</th> <!-- NEW COLUMN -->
+            </tr>
+        </thead>
+        <tbody id="myBooksRows"></tbody>
+    </table>
+</section>
+
+<script>
+
+function banner(msg, type="info") {
+    document.getElementById("msg-area").innerHTML =
+        `<div class="banner ${type}-banner">${msg}</div>`;
+}
+
+
+document.getElementById("backBtn").onclick = () => {
+    window.location.href = "/library.html";
+};
+
+
+async function returnBook(id) {
+    const r = await fetch("/api/return", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookId: id })
+    });
+
+    const d = await r.json();
+    banner(d.message, d.success ? "success" : "error");
+
+    loadMyBooks();
+}
+
+
+async function loadMyBooks() {
+    const r = await fetch("/api/mybooks");
+    const d = await r.json();
+
+    if (!d.success) {
+        banner(d.message, "error");
+        return;
+    }
+
+    const rows = document.getElementById("myBooksRows");
+    rows.innerHTML = "";
+
+    d.books.forEach(b => {
+        let displayStatus =
+            b.status === "available" ? "Available" :
+            b.status === "checked_out" ? "Checked Out" :
+            "On Hold";
+
+        let statusClass =
+            b.status === "available" ? "available" :
+            b.status === "checked_out" ? "checkedout" :
+            "onhold";
+
+        rows.innerHTML += `
+            <tr>
+                <td>${b.title}</td>
+                <td>${b.dueDate ?? "-"}</td>
+                <td><span class="chip ${statusClass}">${displayStatus}</span></td>
+                <td>
+                    <button class="btn small" onclick="returnBook(${b.id})">
+                        Return
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+loadMyBooks();
+</script>
+
+</body>
+</html>
