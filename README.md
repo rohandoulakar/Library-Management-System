@@ -1,7 +1,6 @@
 # Library Management System - Java (Cucumber + JUnit)
 
-A **Library Management System** implemented in **Java**, featuring **JUnit 5** for unit testing and **Cucumber** for behavior-driven development (BDD) testing.  
-This project demonstrates a modular backend system to manage library operations with automated tests validating functionality.
+A **Library Management System** implemented in **Java**, featuring **JUnit 5** for unit testing and **Cucumber** for behavior-driven development (BDD) testing.  This project demonstrates a modular backend system to manage library operations with automated tests validating functionality.
 
 ---
 
